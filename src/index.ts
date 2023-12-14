@@ -1,4 +1,9 @@
+import { exec } from "child_process";
 import {createServer} from "http"
+import {config} from "dotenv"
+import makeLetterReciver from "./route-handlers/make-letter-reciver";
+import step1 from "./route-handlers/registration/step1";
+config();
 
 
 const server = createServer((req,res)=>{
@@ -9,6 +14,17 @@ res.write("hi")
 res.end()
 break;
 
+case "/newsletter/signup":
+
+makeLetterReciver(req,res);
+
+break;
+
+
+case "/registration-step1":
+step1(req,res);
+
+break;
 
 
 
@@ -17,4 +33,7 @@ break;
 
 })
 
-server.listen(3000);
+
+
+server.listen(parseInt(process.env.PORT));
+
