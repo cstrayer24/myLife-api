@@ -38,80 +38,74 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var corsMiddleWare_1 = require("../../lib/middleware/corsMiddleWare");
 var prisma_1 = require("../../prisma");
-var getAgeFromDate_1 = require("../../lib/utilitys/getAgeFromDate");
-var argon2 = require("argon2");
-function step1(req, res) {
+function step2(req, res) {
     var _this = this;
     (0, corsMiddleWare_1.default)(req, res, function (req, res) {
+        var chunks = [];
         var success = true;
-        var chuncks = [];
         req.on("data", function (chunck) {
-            chuncks.push(chunck);
+            chunks.push(chunck);
+            console.log("data");
         }).on("end", function () { return __awaiter(_this, void 0, void 0, function () {
-            var data, _a, firstname, lastname, mail, username, birthday, sex, password, age, hashedPass, User, expirationDate, error_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var dataStr, data, diet_prof, upadatingUser, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        data = Buffer.concat(chuncks).toString();
-                        // console.log(data)
-                        if (req.method != "POST") {
+                        console.log("test");
+                        if (req.method !== "POST") {
                             success = false;
                             res.writeHead(405, "wrong method");
+                            res.write("");
                             res.end();
-                            return [2 /*return*/];
                         }
-                        _a = JSON.parse(data), firstname = _a.firstname, lastname = _a.lastname, mail = _a.mail, username = _a.username, birthday = _a.birthday, sex = _a.sex, password = _a.password;
-                        if (!["male", "female"].includes(sex)) {
-                            res.writeHead(406, "bad data");
-                            res.end();
-                            return [2 /*return*/];
-                        }
-                        age = (0, getAgeFromDate_1.default)(birthday);
-                        _b.label = 1;
+                        dataStr = Buffer.concat(chunks).toString();
+                        data = JSON.parse(dataStr);
+                        console.log(data);
+                        _a.label = 1;
                     case 1:
-                        _b.trys.push([1, 4, , 5]);
-                        return [4 /*yield*/, argon2.hash(password)];
+                        _a.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, prisma_1.default.diet_profile.create({
+                                data: {
+                                    userId: data.userID,
+                                    hasAllergies: data.hasAllergies === "true",
+                                    hasDisease: data.hasDisease === "true",
+                                    allergies: Array.from(data.allergies),
+                                    diseases: Array.from(data.diseases),
+                                    existingDiet: data.currentDiet,
+                                    religiousDiet: data.religiousDiet
+                                }
+                            })];
                     case 2:
-                        hashedPass = _b.sent();
-                        return [4 /*yield*/, prisma_1.default.user.create({ data: {
-                                    firstname: firstname,
-                                    lastname: lastname,
-                                    email: mail,
-                                    username: username,
-                                    birthday: birthday,
-                                    age: age,
-                                    sex: sex,
-                                    password: hashedPass
-                                } })];
+                        diet_prof = _a.sent();
+                        return [4 /*yield*/, prisma_1.default.user.update({
+                                where: {
+                                    id: diet_prof.userId
+                                },
+                                data: {
+                                    diet_profile: diet_prof.id
+                                }
+                            })];
                     case 3:
-                        User = _b.sent();
-                        if (!User) {
-                            success = false;
-                            res.writeHead(500, "user create failed");
-                            res.end();
-                            return [2 /*return*/];
-                        }
-                        expirationDate = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000)).toUTCString();
-                        // res.setHeader("Set-Cookie",[`userid=${User.id};path=/;HttpOnly;expires=${expirationDate};SameSite=Lax`]);
-                        res.setHeader('x-userID', "".concat(User.id));
+                        upadatingUser = _a.sent();
                         return [3 /*break*/, 5];
                     case 4:
-                        error_1 = _b.sent();
-                        success = false;
+                        error_1 = _a.sent();
                         console.log(error_1);
+                        success = false;
                         res.writeHead(500, "error creating user");
+                        res.write("");
                         res.end();
-                        return [2 /*return*/];
+                        return [3 /*break*/, 5];
                     case 5:
                         if (success) {
                             res.writeHead(200, "success");
-                            res.write("check headers");
+                            res.write("");
                             res.end();
                         }
                         return [2 /*return*/];
                 }
             });
         }); });
-    }, ["x-userID"]);
+    });
 }
-exports.default = step1;
+exports.default = step2;

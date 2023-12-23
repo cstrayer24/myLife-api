@@ -22,9 +22,7 @@ let success=true;
 
     req.on("data",(chunck)=>{
         chuncks.push(chunck);
-    })
-    
-    req.on("end",async()=>{
+    }).on("end",async()=>{
         const data = Buffer.concat(chuncks).toString();
 
 // console.log(data)
@@ -58,7 +56,10 @@ try {
         return;
     }
 
-    res.setHeader("Set-Cookie",[`userid=${User.id};path=/;HttpOnly;`]);
+    const expirationDate = new Date(new Date().getTime() + (7 * 24 * 60 * 60 * 1000)).toUTCString();
+
+    // res.setHeader("Set-Cookie",[`userid=${User.id};path=/;HttpOnly;expires=${expirationDate};SameSite=Lax`]);
+    res.setHeader('x-userID',`${User.id}`)
     
     
 } catch (error) {
@@ -72,12 +73,13 @@ return;
 if(success){
 
     res.writeHead(200,"success");
+    res.write("check headers")
     res.end();
 }
 
 
 })
 
-})
+},["x-userID"])
 
 }

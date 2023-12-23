@@ -17,16 +17,17 @@ model letter_reciver {
 }
 
 model User {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  age       Int
-  username  String    @unique
-  firstname String
-  lastname  String
-  email     String    @unique
-  sex String
-  birthday  String
-  password String
-  sessions  Session[]
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  age          Int
+  username     String    @unique
+  firstname    String
+  lastname     String
+  email        String    @unique
+  sex          String
+  birthday     String
+  password     String
+  sessions     Session[]
+  diet_profile String?
 }
 
 model Session {
@@ -36,4 +37,16 @@ model Session {
   userId    String   @db.Uuid
 
   @@index([userId])
+}
+
+model diet_profile {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  userId        String   @db.Uuid
+  hasAllergies  Boolean
+  allergies     String[]
+  existingDiet  String
+  religiousDiet String
+  hasDisease    Boolean
+  diseases      String[]
 }
