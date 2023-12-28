@@ -17,17 +17,18 @@ model letter_reciver {
 }
 
 model User {
-  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  age          Int
-  username     String    @unique
-  firstname    String
-  lastname     String
-  email        String    @unique
-  sex          String
-  birthday     String
-  password     String
-  sessions     Session[]
-  diet_profile String?
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  age              Int
+  username         String    @unique
+  firstname        String
+  lastname         String
+  email            String    @unique
+  sex              String
+  birthday         String
+  password         String
+  sessions         Session[]
+  diet_profile     String?
+  physical_profile String?
 }
 
 model Session {
@@ -49,4 +50,19 @@ model diet_profile {
   religiousDiet String
   hasDisease    Boolean
   diseases      String[]
+  BMR           Float?
+  AMR           Float?
+}
+
+model physical_profile {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  useriD          String   @db.Uuid
+  weight          Int
+  height_str      String
+  hasDisabilities Boolean
+  disabilites     String[]
+  strength        Int
+  endurance       Int
+  bmi             Float
+  height_inches   Int
 }

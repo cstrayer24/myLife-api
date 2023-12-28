@@ -57,6 +57,7 @@ function step2(req, res) {
                             res.writeHead(405, "wrong method");
                             res.write("");
                             res.end();
+                            return [2 /*return*/];
                         }
                         dataStr = Buffer.concat(chunks).toString();
                         data = JSON.parse(dataStr);
@@ -95,7 +96,7 @@ function step2(req, res) {
                         res.writeHead(500, "error creating user");
                         res.write("");
                         res.end();
-                        return [3 /*break*/, 5];
+                        return [2 /*return*/];
                     case 5:
                         if (success) {
                             res.writeHead(200, "success");

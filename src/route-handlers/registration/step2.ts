@@ -18,6 +18,7 @@ if(req.method !== "POST"){
     res.writeHead(405,"wrong method")
     res.write("")
     res.end()
+    return
 }
 
 const dataStr = Buffer.concat(chunks).toString();
@@ -54,6 +55,7 @@ try {
     res.writeHead(500,"error creating user");
     res.write("")
     res.end()
+    return
 }
 if(success){
 

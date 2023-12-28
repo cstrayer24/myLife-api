@@ -4,6 +4,7 @@ import {config} from "dotenv"
 import makeLetterReciver from "./route-handlers/make-letter-reciver";
 import step1 from "./route-handlers/registration/step1";
 import step2 from "./route-handlers/registration/step2";
+import step3 from "./route-handlers/registration/step3";
 config();
 
 
@@ -31,6 +32,13 @@ case "/registration-step2":
 
 step2(req,res);
 break;
+
+
+
+case "/registration-step3":
+step3(req,res)
+break
+
 
 
 }
