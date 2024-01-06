@@ -1,0 +1,21 @@
+request from /registration-step4 at 6request from /registration-step4 at 6
+Invalid `prisma_1.default.mental_profile.create()` invocation in
+/Users/cstrayer/Desktop/Cohens usb/work-stuff/myLife-api/build/route-handlers/registration/step4.js:74:86
+
+  71     _a.label = 1;
+  72 case 1:
+  73     _a.trys.push([1, 4, , 5]);
+→ 74     return [4 /*yield*/, prisma_1.default.mental_profile.create({
+           data: {
+             hasMentalIllness: false,
+             mental_illneses: [],
+             happinessLevel: 5,
+             isReligious: false,
+             current_religion: "islam",
+             relationship_status: "married",
+             employment_status: "schooling",
+         +   userID: String
+           }
+         })
+
+Argument `userID` must not be null.request from /registration-step4 at 6request from /registration-step4 at 6

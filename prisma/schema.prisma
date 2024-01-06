@@ -29,6 +29,7 @@ model User {
   sessions         Session[]
   diet_profile     String?
   physical_profile String?
+  mental_profile   String?
 }
 
 model Session {
@@ -63,6 +64,18 @@ model physical_profile {
   disabilites     String[]
   strength        Int
   endurance       Int
-  bmi             Float
+  bmi             Float?
   height_inches   Int
+}
+
+model mental_profile {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userID              String   @db.Uuid
+  hasMentalIllness    Boolean
+  happinessLevel      Int
+  mental_illneses     String[]
+  isReligious         Boolean
+  current_religion    String   @default("none")
+  relationship_status String   @default("single")
+  employment_status   String   @default("unemployed")
 }

@@ -1,6 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 import useCors from "../lib/middleware/corsMiddleWare";
 import prsima from "../prisma";
+import writeLogs from "../writeLogs";
 export default function makeLetterReciver(req:IncomingMessage,res:ServerResponse<IncomingMessage>){
 
     
@@ -31,7 +32,10 @@ export default function makeLetterReciver(req:IncomingMessage,res:ServerResponse
                 success = false;
                 res.writeHead(403,"wrong method");
                 
-                res.end()
+                res.end(()=>{
+                    writeLogs(`req from ${req.url} failed due to a 403`)
+
+                })
             }
             
             
@@ -44,7 +48,11 @@ export default function makeLetterReciver(req:IncomingMessage,res:ServerResponse
             if(jsonBody.name === "" || jsonBody.emailAdress === ""){
                 success = false;
                 res.writeHead(400,"invalid  data");
-                res.end();
+                
+                res.end(()=>{
+
+                    writeLogs(`req from ${req.url} failed due to 400`)
+                });
             }
             try{
                 
@@ -59,12 +67,17 @@ export default function makeLetterReciver(req:IncomingMessage,res:ServerResponse
             }catch(e){
                 success = false
                 res.writeHead(403,"query fail")
-                res.end()
+                
+                res.end(()=>{
+
+                    writeLogs(e.message)
+                })
                 
                 
             }
             if(success){
                 res.writeHead(200,"sucess");
+                writeLogs("success")
                 res.end()
             } 
         })

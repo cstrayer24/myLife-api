@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var corsMiddleWare_1 = require("../lib/middleware/corsMiddleWare");
 var prisma_1 = require("../prisma");
+var writeLogs_1 = require("../writeLogs");
 function makeLetterReciver(req, res) {
     var _this = this;
     (0, corsMiddleWare_1.default)(req, res, function (req, res) {
@@ -54,7 +55,9 @@ function makeLetterReciver(req, res) {
                         if (req.method !== "POST") {
                             success = false;
                             res.writeHead(403, "wrong method");
-                            res.end();
+                            res.end(function () {
+                                (0, writeLogs_1.default)("req from ".concat(req.url, " failed due to a 403"));
+                            });
                         }
                         body = Buffer.concat(chuncks).toString();
                         jsonBody = JSON.parse(body);
@@ -62,7 +65,9 @@ function makeLetterReciver(req, res) {
                         if (jsonBody.name === "" || jsonBody.emailAdress === "") {
                             success = false;
                             res.writeHead(400, "invalid  data");
-                            res.end();
+                            res.end(function () {
+                                (0, writeLogs_1.default)("req from ".concat(req.url, " failed due to 400"));
+                            });
                         }
                         _a.label = 1;
                     case 1:
@@ -80,11 +85,14 @@ function makeLetterReciver(req, res) {
                         e_1 = _a.sent();
                         success = false;
                         res.writeHead(403, "query fail");
-                        res.end();
+                        res.end(function () {
+                            (0, writeLogs_1.default)(e_1.message);
+                        });
                         return [3 /*break*/, 4];
                     case 4:
                         if (success) {
                             res.writeHead(200, "sucess");
+                            (0, writeLogs_1.default)("success");
                             res.end();
                         }
                         return [2 /*return*/];
