@@ -39,6 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var corsMiddleWare_1 = require("../../lib/middleware/corsMiddleWare");
 var prisma_1 = require("../../prisma");
 var writeLogs_1 = require("../../writeLogs");
+var createSession_1 = require("../../lib/utilitys/createSession");
+var createSessionCookie_1 = require("../../lib/utilitys/createSessionCookie");
 function step4(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
@@ -46,10 +48,12 @@ function step4(req, res) {
             (0, corsMiddleWare_1.default)(req, res, function (req, res) {
                 var chuncks = [];
                 var success = true;
-                req.on("data", function (c) {
+                req
+                    .on("data", function (c) {
                     chuncks.push(c);
-                }).on("end", function () { return __awaiter(_this, void 0, void 0, function () {
-                    var bodyStr, bodyObj, newMentalProf, error_1;
+                })
+                    .on("end", function () { return __awaiter(_this, void 0, void 0, function () {
+                    var bodyStr, bodyObj, newMentalProf, newSession, error_1;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -62,7 +66,8 @@ function step4(req, res) {
                                 bodyStr = Buffer.concat(chuncks).toString();
                                 bodyObj = JSON.parse(bodyStr);
                                 console.log(bodyObj);
-                                if (parseInt(bodyObj.happinessLevel) > 5 || parseInt(bodyObj.happinessLevel) < 0) {
+                                if (parseInt(bodyObj.happinessLevel) > 5 ||
+                                    parseInt(bodyObj.happinessLevel) < 0) {
                                     res.writeHead(422, "err bad data");
                                     res.write("");
                                     success = false;
@@ -70,7 +75,7 @@ function step4(req, res) {
                                 }
                                 _a.label = 1;
                             case 1:
-                                _a.trys.push([1, 4, , 5]);
+                                _a.trys.push([1, 5, , 6]);
                                 return [4 /*yield*/, prisma_1.default.mental_profile.create({
                                         data: {
                                             userID: bodyObj.userID,
@@ -80,41 +85,44 @@ function step4(req, res) {
                                             isReligious: bodyObj.isReligious == "true",
                                             current_religion: bodyObj.current_religion,
                                             relationship_status: bodyObj.relationship_status,
-                                            employment_status: bodyObj.employment_status
-                                        }
+                                            employment_status: bodyObj.employment_status,
+                                        },
                                     })];
                             case 2:
                                 newMentalProf = _a.sent();
                                 return [4 /*yield*/, prisma_1.default.user.update({
                                         where: {
-                                            id: newMentalProf.userID
+                                            id: newMentalProf.userID,
                                         },
                                         data: {
-                                            mental_profile: newMentalProf.id
-                                        }
+                                            mental_profile: newMentalProf.id,
+                                        },
                                     })];
                             case 3:
                                 _a.sent();
-                                return [3 /*break*/, 5];
+                                return [4 /*yield*/, (0, createSession_1.default)(newMentalProf.userID)];
                             case 4:
+                                newSession = _a.sent();
+                                res.setHeader("Set-Cookie", (0, createSessionCookie_1.default)(newSession.id));
+                                if (success) {
+                                    res.writeHead(200, "success");
+                                    res.write(JSON.stringify(newSession));
+                                    res.end();
+                                }
+                                return [3 /*break*/, 6];
+                            case 5:
                                 error_1 = _a.sent();
                                 (0, writeLogs_1.default)(error_1.message);
                                 res.writeHead(400, "db error");
                                 res.write("");
                                 success = false;
                                 res.end();
-                                return [3 /*break*/, 5];
-                            case 5:
-                                if (success) {
-                                    res.writeHead(200, "success");
-                                    res.write("");
-                                    res.end();
-                                }
-                                return [2 /*return*/];
+                                return [3 /*break*/, 6];
+                            case 6: return [2 /*return*/];
                         }
                     });
                 }); });
-            });
+            }, [], "http://127.0.0.1:5501");
             return [2 /*return*/];
         });
     });

@@ -36,69 +36,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var argon2 = require("argon2");
 var corsMiddleWare_1 = require("../lib/middleware/corsMiddleWare");
+var chuncksToJson_1 = require("../lib/utilitys/chuncksToJson");
 var prisma_1 = require("../prisma");
-var writeLogs_1 = require("../writeLogs");
-function makeLetterReciver(req, res) {
+var createSession_1 = require("../lib/utilitys/createSession");
+var createCookie_1 = require("../lib/utilitys/createCookie");
+function login(req, res) {
     var _this = this;
     (0, corsMiddleWare_1.default)(req, res, function (req, res) {
-        var success = true;
         var chuncks = [];
-        req.on("data", function (chunck) {
+        var success = true;
+        req
+            .on("data", function (chunck) {
             chuncks.push(chunck);
-        });
-        req.on("end", function () { return __awaiter(_this, void 0, void 0, function () {
-            var body, jsonBody, letterReciver, e_1;
+        })
+            .on("end", function () { return __awaiter(_this, void 0, void 0, function () {
+            var bodyObj, current_user, session, cookie, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (req.method !== "POST") {
-                            success = false;
-                            res.writeHead(403, "wrong method");
-                            res.end(function () {
-                                (0, writeLogs_1.default)("req from ".concat(req.url, " failed due to a 403"));
-                            });
+                            res.writeHead(422, "wrong method");
+                            res.end();
+                            return [2 /*return*/];
                         }
-                        body = Buffer.concat(chuncks).toString();
-                        jsonBody = JSON.parse(body);
-                        console.log(jsonBody);
-                        if (jsonBody.name === "" || jsonBody.emailAdress === "") {
-                            success = false;
-                            res.writeHead(400, "invalid  data");
-                            res.end(function () {
-                                (0, writeLogs_1.default)("req from ".concat(req.url, " failed due to 400"));
-                            });
-                        }
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, prisma_1.default.letter_reciver.create({
-                                data: {
-                                    email: jsonBody.emailAdress,
-                                    name: jsonBody.name,
+                        bodyObj = (0, chuncksToJson_1.default)(chuncks);
+                        return [4 /*yield*/, prisma_1.default.user.findFirst({
+                                where: {
+                                    email: bodyObj.mail,
                                 },
                             })];
+                    case 1:
+                        current_user = _a.sent();
+                        console.log(current_user);
+                        return [4 /*yield*/, argon2.verify(current_user.password, bodyObj.password)];
                     case 2:
-                        letterReciver = _a.sent();
-                        return [3 /*break*/, 4];
+                        if (!(_a.sent())) {
+                            res.writeHead(400, "wrong passwd");
+                            res.end();
+                            return [2 /*return*/];
+                        }
+                        _a.label = 3;
                     case 3:
-                        e_1 = _a.sent();
-                        success = false;
-                        res.writeHead(403, "query fail");
-                        res.end(function () {
-                            (0, writeLogs_1.default)(e_1.message);
-                        });
-                        return [3 /*break*/, 4];
+                        _a.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, (0, createSession_1.default)(current_user.id)];
                     case 4:
-                        if (success) {
-                            res.writeHead(200, "sucess");
-                            (0, writeLogs_1.default)("success");
+                        session = _a.sent();
+                        if (session) {
+                            cookie = (0, createCookie_1.default)("sessionid", session.id, "/", true, new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7), "None", true);
+                            res.setHeader("Set-Cookie", cookie);
+                            res.writeHead(200, "logged in");
+                            res.write(JSON.stringify({ sessionid: session.id }));
                             res.end();
                         }
-                        return [2 /*return*/];
+                        return [3 /*break*/, 6];
+                    case 5:
+                        error_1 = _a.sent();
+                        res.writeHead(500, "failed to create session");
+                        res.end();
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
                 }
             });
         }); });
-    });
+    }, ["content-type"], "http://127.0.0.1:5501");
 }
-exports.default = makeLetterReciver;
+exports.default = login;

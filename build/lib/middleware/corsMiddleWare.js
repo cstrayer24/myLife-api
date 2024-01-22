@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function useCors(req, res, handler, exposedHeaders) {
-    res.setHeader('Access-Control-Allow-Methods', "POST,GET");
+function useCors(req, res, handler, exposedHeaders, origin) {
+    res.setHeader("Access-Control-Allow-Methods", "POST,GET");
     res.setHeader("Access-Control-Expose-Headers", "*");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
     // res.setHeader("Access-Control-Allow-Methods","true");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "content-type,Accept-Language,Content-Language,Content-Type");
+    res.setHeader("Access-Control-Allow-Origin", "".concat(origin ? origin : "*"));
     if (req.method === "OPTIONS") {
         res.write("preflight");
         res.end();

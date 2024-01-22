@@ -43,10 +43,12 @@ function step2(req, res) {
     (0, corsMiddleWare_1.default)(req, res, function (req, res) {
         var chunks = [];
         var success = true;
-        req.on("data", function (chunck) {
+        req
+            .on("data", function (chunck) {
             chunks.push(chunck);
             console.log("data");
-        }).on("end", function () { return __awaiter(_this, void 0, void 0, function () {
+        })
+            .on("end", function () { return __awaiter(_this, void 0, void 0, function () {
             var dataStr, data, diet_prof, upadatingUser, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -61,7 +63,6 @@ function step2(req, res) {
                         }
                         dataStr = Buffer.concat(chunks).toString();
                         data = JSON.parse(dataStr);
-                        console.log(data);
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 4, , 5]);
@@ -73,18 +74,18 @@ function step2(req, res) {
                                     allergies: Array.from(data.allergies),
                                     diseases: Array.from(data.diseases),
                                     existingDiet: data.currentDiet,
-                                    religiousDiet: data.religiousDiet
-                                }
+                                    religiousDiet: data.religiousDiet,
+                                },
                             })];
                     case 2:
                         diet_prof = _a.sent();
                         return [4 /*yield*/, prisma_1.default.user.update({
                                 where: {
-                                    id: diet_prof.userId
+                                    id: diet_prof.userId,
                                 },
                                 data: {
-                                    diet_profile: diet_prof.id
-                                }
+                                    diet_profile: diet_prof.id,
+                                },
                             })];
                     case 3:
                         upadatingUser = _a.sent();

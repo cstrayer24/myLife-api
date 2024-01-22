@@ -49,9 +49,11 @@ function step3(req, res) {
             (0, corsMiddleWare_1.default)(req, res, function (req, res) {
                 var chunks = [];
                 var success = true;
-                req.on("data", function (chunk) {
+                req
+                    .on("data", function (chunk) {
                     chunks.push(chunk);
-                }).on("end", function () { return __awaiter(_this, void 0, void 0, function () {
+                })
+                    .on("end", function () { return __awaiter(_this, void 0, void 0, function () {
                     var bodyStr, bodyObj, currentUser, heightVals, height_inches, i, bmi, weightKg, heightCm, BMR, AMR, prof, current_user_diet_prof, e_1;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
@@ -66,9 +68,11 @@ function step3(req, res) {
                                 bodyStr = Buffer.concat(chunks).toString();
                                 bodyObj = JSON.parse(bodyStr);
                                 console.log(bodyObj);
-                                return [4 /*yield*/, prisma_1.default.user.findFirst({ where: {
-                                            id: bodyObj.userID
-                                        } })];
+                                return [4 /*yield*/, prisma_1.default.user.findFirst({
+                                        where: {
+                                            id: bodyObj.userID,
+                                        },
+                                    })];
                             case 1:
                                 currentUser = _a.sent();
                                 heightVals = bodyObj.height.split(",");
@@ -95,32 +99,34 @@ function step3(req, res) {
                                             disabilites: Array.from(bodyObj.disabilities),
                                             strength: parseInt(bodyObj.strength),
                                             endurance: parseInt(bodyObj.endurance),
-                                            bmi: bmi
-                                        }
+                                            bmi: bmi,
+                                        },
                                     })];
                             case 3:
                                 prof = _a.sent();
-                                return [4 /*yield*/, prisma_1.default.diet_profile.findFirst({ where: { userId: bodyObj.userID } })];
+                                return [4 /*yield*/, prisma_1.default.diet_profile.findFirst({
+                                        where: { userId: bodyObj.userID },
+                                    })];
                             case 4:
                                 current_user_diet_prof = _a.sent();
                                 return [4 /*yield*/, prisma_1.default.diet_profile.update({
                                         where: {
-                                            id: current_user_diet_prof.id
+                                            id: current_user_diet_prof.id,
                                         },
                                         data: {
                                             BMR: BMR,
-                                            AMR: AMR
-                                        }
+                                            AMR: AMR,
+                                        },
                                     })];
                             case 5:
                                 _a.sent();
                                 return [4 /*yield*/, prisma_1.default.user.update({
                                         where: {
-                                            id: currentUser.id
+                                            id: currentUser.id,
                                         },
                                         data: {
-                                            diet_profile: prof.id
-                                        }
+                                            physical_profile: prof.id,
+                                        },
                                     })];
                             case 6:
                                 _a.sent();
