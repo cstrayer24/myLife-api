@@ -62,6 +62,7 @@ function login(req, res) {
                             return [2 /*return*/];
                         }
                         bodyObj = (0, chuncksToJson_1.default)(chuncks);
+                        console.log(bodyObj);
                         return [4 /*yield*/, prisma_1.default.user.findFirst({
                                 where: {
                                     email: bodyObj.mail,
@@ -69,7 +70,10 @@ function login(req, res) {
                             })];
                     case 1:
                         current_user = _a.sent();
-                        console.log(current_user);
+                        if (!current_user) {
+                            res.writeHead(400, "not authorized");
+                            res.end();
+                        }
                         return [4 /*yield*/, argon2.verify(current_user.password, bodyObj.password)];
                     case 2:
                         if (!(_a.sent())) {
@@ -100,6 +104,6 @@ function login(req, res) {
                 }
             });
         }); });
-    }, ["content-type"], "http://127.0.0.1:5501");
+    }, ["content-type"], process.env.LANDINGURL);
 }
 exports.default = login;

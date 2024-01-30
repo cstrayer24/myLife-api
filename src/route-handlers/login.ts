@@ -28,12 +28,16 @@ export default function login(
           }
 
           const bodyObj = chuncksToJson(chuncks);
+          console.log(bodyObj);
           const current_user = await prsima.user.findFirst({
             where: {
               email: bodyObj.mail,
             },
           });
-          console.log(current_user);
+          if (!current_user) {
+            res.writeHead(400, "not authorized");
+            res.end();
+          }
           if (!(await argon2.verify(current_user.password, bodyObj.password))) {
             res.writeHead(400, "wrong passwd");
             res.end();
@@ -65,6 +69,6 @@ export default function login(
         });
     },
     ["content-type"],
-    "http://127.0.0.1:5501"
+    process.env.LANDINGURL
   );
 }

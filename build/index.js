@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_1 = require("http");
 var dotenv_1 = require("dotenv");
+//route handlers
 var make_letter_reciver_1 = require("./route-handlers/make-letter-reciver");
 var step1_1 = require("./route-handlers/registration/step1");
 var step2_1 = require("./route-handlers/registration/step2");
@@ -9,7 +10,9 @@ var step3_1 = require("./route-handlers/registration/step3");
 var writeLogs_1 = require("./writeLogs");
 var step4_1 = require("./route-handlers/registration/step4");
 var login_1 = require("./route-handlers/login");
+var getbaseUserData_1 = require("./route-handlers/getbaseUserData");
 (0, dotenv_1.config)();
+console.log("starting at ".concat(new Date().toLocaleTimeString()));
 var server = (0, http_1.createServer)(function (req, res) {
     (0, writeLogs_1.default)("request from ".concat(req.url, " at ").concat(new Date().getUTCDay()));
     switch (req.url) {
@@ -34,6 +37,9 @@ var server = (0, http_1.createServer)(function (req, res) {
             break;
         case "/user-login":
             (0, login_1.default)(req, res);
+            break;
+        case "/getBaseUserData":
+            (0, getbaseUserData_1.default)(req, res);
             break;
     }
 });
