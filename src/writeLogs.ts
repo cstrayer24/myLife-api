@@ -1,22 +1,20 @@
-import {mkdirSync,appendFileSync, lstatSync, fstatSync,existsSync} from "fs"
+import {
+  mkdirSync,
+  appendFileSync,
+  lstatSync,
+  fstatSync,
+  existsSync,
+} from "fs";
 
-
-
-
-
-
-
-function writeLogs(log:string){
-    if(!existsSync("logs")){
-    
+function writeLogs(log: string) {
+  if (!existsSync("logs")) {
     mkdirSync("logs");
-    
-    
-    }
-    
+  }
 
-    appendFileSync(`logs/${new Date().toDateString().split(" ").join("_")}.txt`,log)
+  appendFileSync(
+    `logs/${new Date().toDateString().split(" ").join("_")}.txt`,
+    `${log}\n`
+  );
 }
-
 
 export default writeLogs;

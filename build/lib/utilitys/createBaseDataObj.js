@@ -1,13 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function setObj(keys, baseobj) {
-    var userObj = {};
-    for (var i = 0; i < keys.length; i++) {
-        var current = keys[i];
-        userObj[current] = baseobj[current];
-    }
-    return userObj;
-}
+var setObj_1 = require("./setObj");
 function createBaseDataObj(user, diet, physical, mental) {
     //filter the rest of the keys
     var userKeys = Object.keys(user).filter(function (v) {
@@ -22,10 +15,10 @@ function createBaseDataObj(user, diet, physical, mental) {
     var physicalKeys = Object.keys(physical).filter(function (v) { return !["id", "userId", "useriD"].includes(v); });
     var mentalKeys = Object.keys(mental).filter(function (v) { return !["id", "userid", "userID"].includes(v); });
     var data = {
-        info: setObj(userKeys, user),
-        physical: setObj(physicalKeys, physical),
-        diet: setObj(dietKeys, diet),
-        mental: setObj(mentalKeys, mental),
+        info: (0, setObj_1.default)(userKeys, user),
+        physical: (0, setObj_1.default)(physicalKeys, physical),
+        diet: (0, setObj_1.default)(dietKeys, diet),
+        mental: (0, setObj_1.default)(mentalKeys, mental),
     };
     return data;
 }

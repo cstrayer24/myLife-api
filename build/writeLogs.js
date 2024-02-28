@@ -5,6 +5,6 @@ function writeLogs(log) {
     if (!(0, fs_1.existsSync)("logs")) {
         (0, fs_1.mkdirSync)("logs");
     }
-    (0, fs_1.appendFileSync)("logs/".concat(new Date().toDateString().split(" ").join("_"), ".txt"), log);
+    (0, fs_1.appendFileSync)("logs/".concat(new Date().toDateString().split(" ").join("_"), ".txt"), "".concat(log, "\n"));
 }
 exports.default = writeLogs;

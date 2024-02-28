@@ -9,14 +9,10 @@ export default function getBaseUserData(
   req: IncomingMessage,
   res: ServerResponse<IncomingMessage>
 ) {
-  console.log("before");
   useCors(
     req,
     res,
     async (req, res) => {
-      console.log("here");
-
-      console.log("test");
       try {
         if (!req.headers["x-sessionid"]) {
           res.writeHead(422, "err bad data");

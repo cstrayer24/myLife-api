@@ -42,17 +42,12 @@ var writeLogs_1 = require("../writeLogs");
 var corsMiddleWare_1 = require("../lib/middleware/corsMiddleWare");
 function getBaseUserData(req, res) {
     var _this = this;
-    console.log("before");
     (0, corsMiddleWare_1.default)(req, res, function (req, res) { return __awaiter(_this, void 0, void 0, function () {
         var session, user, mental_profile, physical_profile, diet_profile, baseData, error_1, e;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log("here");
-                    console.log("test");
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 7, , 8]);
+                    _a.trys.push([0, 6, , 7]);
                     if (!req.headers["x-sessionid"]) {
                         res.writeHead(422, "err bad data");
                         res.end();
@@ -63,35 +58,35 @@ function getBaseUserData(req, res) {
                                 id: req.headers["x-sessionid"],
                             },
                         })];
-                case 2:
+                case 1:
                     session = _a.sent();
                     return [4 /*yield*/, prisma_1.default.user.findFirst({
                             where: {
                                 id: session.userId,
                             },
                         })];
-                case 3:
+                case 2:
                     user = _a.sent();
                     return [4 /*yield*/, prisma_1.default.mental_profile.findFirst({
                             where: {
                                 id: user.mental_profile,
                             },
                         })];
-                case 4:
+                case 3:
                     mental_profile = _a.sent();
                     return [4 /*yield*/, prisma_1.default.physical_profile.findFirst({
                             where: {
                                 id: user.physical_profile,
                             },
                         })];
-                case 5:
+                case 4:
                     physical_profile = _a.sent();
                     return [4 /*yield*/, prisma_1.default.diet_profile.findFirst({
                             where: {
                                 id: user.diet_profile,
                             },
                         })];
-                case 6:
+                case 5:
                     diet_profile = _a.sent();
                     baseData = (0, createBaseDataObj_1.default)(user, diet_profile, physical_profile, mental_profile);
                     if (!baseData) {
@@ -102,15 +97,15 @@ function getBaseUserData(req, res) {
                     res.write(JSON.stringify(baseData));
                     // res.write("test");
                     res.end();
-                    return [3 /*break*/, 8];
-                case 7:
+                    return [3 /*break*/, 7];
+                case 6:
                     error_1 = _a.sent();
                     e = error_1;
                     (0, writeLogs_1.default)(e.message);
                     res.writeHead(500, "internal server error");
                     res.end();
                     return [2 /*return*/];
-                case 8: return [2 /*return*/];
+                case 7: return [2 /*return*/];
             }
         });
     }); }, ["x-sessionid"]);

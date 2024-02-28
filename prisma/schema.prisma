@@ -27,9 +27,11 @@ model User {
   birthday         String
   password         String
   sessions         Session[]
+  pfp              String?
   diet_profile     String?
   physical_profile String?
   mental_profile   String?
+  cartid           String?
 }
 
 model Session {
@@ -78,4 +80,49 @@ model mental_profile {
   current_religion    String   @default("none")
   relationship_status String   @default("single")
   employment_status   String   @default("unemployed")
+}
+
+model goal {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  userId             String  @db.Uuid
+  name               String
+  expectedCompletion String
+  startTime          String
+  status             String  @default("not started")
+  description        String?
+  timeType           String
+}
+
+model product {
+  id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name  String
+  price Float
+  image String
+}
+
+model cart {
+  id     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String   @db.Uuid
+  items  String[]
+  total  Float    @default(0)
+}
+
+model pathItem {
+  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  img          String
+  status       String
+  expectedTime String
+  //all the path linking
+  prev         String
+  left         String
+  right        String
+}
+
+model path {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String
+  thumbnail   String
 }
