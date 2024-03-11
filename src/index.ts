@@ -21,6 +21,7 @@ import getCartItems from "./route-handlers/get-cart-items";
 import removeCartItem from "./route-handlers/remove-cart-item";
 import createCheckoutSessionShop from "./route-handlers/create-checkout-session-shop";
 import clearCart from "./route-handlers/clear-cart";
+import makePath from "./route-handlers/make-path";
 
 config();
 console.log(`starting at ${new Date().toLocaleTimeString()}`);
@@ -102,6 +103,11 @@ const server = createServer((req, res) => {
       break;
     case "/clear-cart":
       clearCart(req, res);
+      break;
+
+    case "/make-path":
+      makePath(req, res);
+
       break;
   }
 });

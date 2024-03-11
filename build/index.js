@@ -23,6 +23,7 @@ var get_cart_items_1 = require("./route-handlers/get-cart-items");
 var remove_cart_item_1 = require("./route-handlers/remove-cart-item");
 var create_checkout_session_shop_1 = require("./route-handlers/create-checkout-session-shop");
 var clear_cart_1 = require("./route-handlers/clear-cart");
+var make_path_1 = require("./route-handlers/make-path");
 (0, dotenv_1.config)();
 console.log("starting at ".concat(new Date().toLocaleTimeString()));
 var server = (0, http_1.createServer)(function (req, res) {
@@ -88,6 +89,9 @@ var server = (0, http_1.createServer)(function (req, res) {
             break;
         case "/clear-cart":
             (0, clear_cart_1.default)(req, res);
+            break;
+        case "/make-path":
+            (0, make_path_1.default)(req, res);
             break;
     }
 });

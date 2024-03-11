@@ -32,6 +32,7 @@ model User {
   physical_profile String?
   mental_profile   String?
   cartid           String?
+  currentPathid    String?
 }
 
 model Session {
@@ -109,20 +110,23 @@ model cart {
 }
 
 model pathItem {
-  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
   img          String
   status       String
   expectedTime String
   //all the path linking
-  prev         String
-  left         String
-  right        String
+  prev         String?
+  left         String?
+  right        String?
+  pathid       String
 }
 
 model path {
-  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
   description String
   thumbnail   String
+  keywords    String[]
+  firstId     String?  @db.Uuid
 }
