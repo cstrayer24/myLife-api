@@ -36,7 +36,7 @@ export default function makePath(
               description: data.description,
               name: data.pathName,
               thumbnail: `${process.env.IMGURL}/${data.fname}`,
-              keywords: data.keyWordList,
+              keywords: data.keywordList,
             },
           });
           res.writeHead(200, "success");

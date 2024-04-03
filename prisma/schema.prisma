@@ -110,16 +110,15 @@ model cart {
 }
 
 model pathItem {
-  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name         String
-  img          String
-  status       String
-  expectedTime String
+  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String
+  img    String
+  status String
   //all the path linking
-  prev         String?
-  left         String?
-  right        String?
-  pathid       String
+  prev   String?
+  left   String?
+  right  String?
+  pathid String
 }
 
 model path {
