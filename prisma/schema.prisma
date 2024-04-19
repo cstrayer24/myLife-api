@@ -33,6 +33,7 @@ model User {
   mental_profile   String?
   cartid           String?
   currentPathid    String?
+  workouts         String[]
 }
 
 model Session {
@@ -128,4 +129,172 @@ model path {
   thumbnail   String
   keywords    String[]
   firstId     String?  @db.Uuid
+}
+
+model spot {
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name    String
+  image   String
+  address String
+  weblink String
+}
+
+//workout stuff
+
+enum exerciseType {
+  CARDIO
+  ENDURANCE
+  LIFTING
+  CALISTHENICS
+}
+
+enum stretchType {
+  //warmups
+  HIP_CIRCLES
+  ARM_CIRCLES
+  ARM_SWINGS
+  FORWARD_JOG
+  BACKWARD_JOG
+  SIDE_STEP
+  HIGH_KNEES
+  BRAIDING
+  //cooldowns
+  CHILDS_POSE
+  CAT_COW
+  STANDING_CHEST_OPENER
+  OVERHEAD_TRICEPS_STRETCH
+  SEATED_FORWARD_BEND
+  KNEE_TO_CHEST_STRETCH
+  QUAD_STRETCH
+  HAMSTRING_STRETCH
+  CALF_STRETCH
+}
+
+model stretch {
+  id   String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type stretchType
+  reps Int
+}
+
+model exercise {
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type       exerciseType
+  activityid String
+  workout    workout[]
+}
+
+model countedActivity {
+  id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sets Int
+  rps  Int //reps per set
+}
+
+model timedActivity {
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  minutes Int
+  seconds Int
+}
+
+model workout {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  warmupStretchid   String
+  mainExercise      exercise @relation(fields: [mainExerciseid], references: [id])
+  mainExerciseid    String   @db.Uuid
+  coolDownStretchid String
+}
+
+//diet stuff
+
+enum drinkType {
+  WATER
+  COFFEE
+  OJ
+  AJ
+  MILK
+  CHOCOLATE_MILK
+  SPORTS_DRINK
+  TEA
+  SPARKLING_WATER
+  RED_WINE
+}
+
+enum protienType {
+  EGGS
+  BACON
+  STEAK
+  SAUSAGE
+  TURKEY
+  HAM
+  SALAMI
+  FISH
+  CHICKEN
+  LAMB
+  PORK
+}
+
+enum vegType {
+  SPINACH
+  PEPPERS
+  TOMATOES
+  AVOCADO
+  LETTUCE
+  BROCCOLI
+  ASPARAGUS
+}
+
+enum fruitType {
+  STRAWBERRY
+  ORANGE
+  APPLE
+  BLUEBERRY
+  WATERMELON
+}
+
+enum carbType {
+  HASHBROWN
+  OATMEAL
+  GRANOLA
+  BAKED_POTATO
+  RICE
+  BROWN_RICE
+  NOODLES
+  QUINOA
+  MASHED_POTATO
+}
+
+model meal {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  drink       drinkType
+  mainProtien protienType
+  vegtable    vegType
+  fruit       fruitType
+  carb        carbType
+}
+
+model diet {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  breakfastid String @db.Uuid
+  lunchid     String @db.Uuid
+  dinner      String @db.Uuid
+}
+
+//social stuff
+
+model socialCard {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userid   String
+  number   String
+  xHandle  String
+  FBhandle String
+  IGHandle String
+}
+
+model group {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name               String
+  associatedKeywords String
+  thumbnail          String
+  members            String[]
 }

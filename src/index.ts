@@ -22,6 +22,8 @@ import removeCartItem from "./route-handlers/remove-cart-item";
 import createCheckoutSessionShop from "./route-handlers/create-checkout-session-shop";
 import clearCart from "./route-handlers/clear-cart";
 import makePath from "./route-handlers/make-path";
+import makeWorkout from "./route-handlers/make-workout";
+import getGroupByKeyword from "./route-handlers/get-group-by-keyword";
 
 config();
 console.log(`starting at ${new Date().toLocaleTimeString()}`);
@@ -108,6 +110,13 @@ const server = createServer((req, res) => {
     case "/make-path":
       makePath(req, res);
 
+      break;
+    case "/make-workout":
+      makeWorkout(req, res);
+      break;
+
+    case "/get-group-by-keyword":
+      getGroupByKeyword(req, res);
       break;
   }
 });
