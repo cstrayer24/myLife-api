@@ -1,11 +1,12 @@
 import { createServer } from "http";
 import { config } from "dotenv";
+
+import writeLogs from "./writeLogs";
 //route handlers
 import makeLetterReciver from "./route-handlers/make-letter-reciver";
 import step1 from "./route-handlers/registration/step1";
 import step2 from "./route-handlers/registration/step2";
 import step3 from "./route-handlers/registration/step3";
-import writeLogs from "./writeLogs";
 import step4 from "./route-handlers/registration/step4";
 import login from "./route-handlers/login";
 import getBaseUserData from "./route-handlers/getbaseUserData";
@@ -29,6 +30,7 @@ config();
 console.log(`starting at ${new Date().toLocaleTimeString()}`);
 const server = createServer((req, res) => {
   writeLogs(`request from ${req.url} at ${new Date().getUTCDay()}`);
+  console.log("api request");
   switch (req.url) {
     case "/test":
       res.write("hi");
@@ -116,6 +118,7 @@ const server = createServer((req, res) => {
       break;
 
     case "/get-group-by-keyword":
+      console.log("here");
       getGroupByKeyword(req, res);
       break;
   }

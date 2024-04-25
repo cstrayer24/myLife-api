@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_1 = require("http");
 var dotenv_1 = require("dotenv");
+var writeLogs_1 = require("./writeLogs");
 //route handlers
 var make_letter_reciver_1 = require("./route-handlers/make-letter-reciver");
 var step1_1 = require("./route-handlers/registration/step1");
 var step2_1 = require("./route-handlers/registration/step2");
 var step3_1 = require("./route-handlers/registration/step3");
-var writeLogs_1 = require("./writeLogs");
 var step4_1 = require("./route-handlers/registration/step4");
 var login_1 = require("./route-handlers/login");
 var getbaseUserData_1 = require("./route-handlers/getbaseUserData");
@@ -24,10 +24,13 @@ var remove_cart_item_1 = require("./route-handlers/remove-cart-item");
 var create_checkout_session_shop_1 = require("./route-handlers/create-checkout-session-shop");
 var clear_cart_1 = require("./route-handlers/clear-cart");
 var make_path_1 = require("./route-handlers/make-path");
+var make_workout_1 = require("./route-handlers/make-workout");
+var get_group_by_keyword_1 = require("./route-handlers/get-group-by-keyword");
 (0, dotenv_1.config)();
 console.log("starting at ".concat(new Date().toLocaleTimeString()));
 var server = (0, http_1.createServer)(function (req, res) {
     (0, writeLogs_1.default)("request from ".concat(req.url, " at ").concat(new Date().getUTCDay()));
+    console.log("api request");
     switch (req.url) {
         case "/test":
             res.write("hi");
@@ -92,6 +95,13 @@ var server = (0, http_1.createServer)(function (req, res) {
             break;
         case "/make-path":
             (0, make_path_1.default)(req, res);
+            break;
+        case "/make-workout":
+            (0, make_workout_1.default)(req, res);
+            break;
+        case "/get-group-by-keyword":
+            console.log("here");
+            (0, get_group_by_keyword_1.default)(req, res);
             break;
     }
 });

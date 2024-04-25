@@ -17,6 +17,7 @@ export default function getGroupByKeyword(
       })
       .on("end", async () => {
         try {
+          console.log("in api");
           if (req.method !== "POST") {
             res.writeHead(405, "Wrong Method");
             res.end();
@@ -35,9 +36,9 @@ export default function getGroupByKeyword(
           let resBod = [];
           const groups = await prsima.group.findMany();
 
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0; i < data.keywords.length; i++) {
             groups.forEach((v) => {
-              if (v.associatedKeywords.includes(data[i])) {
+              if (v.associatedKeywords.includes(data.keywords[i])) {
                 resBod.push(v);
                 console.log("hi");
               }
